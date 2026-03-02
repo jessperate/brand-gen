@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Burn Book - AEO Edition</title>
+<meta property="og:title" content="The Burn Book - AEO Edition">
+<meta property="og:description" content="Who's ACTUALLY getting cited by AI? ...and who's just getting mentioned">
+<meta property="og:image" content="https://burnbook-weld.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Burn Book - AEO Edition">
+<meta name="twitter:description" content="Who's ACTUALLY getting cited by AI? ...and who's just getting mentioned">
+<meta name="twitter:image" content="https://burnbook-weld.vercel.app/og-image.png">
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400;700&family=Indie+Flower&family=Gloria+Hallelujah&family=Shadows+Into+Light&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #000 url('marble.jpg') repeat;
+    background-size: 400px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Caveat', cursive;
+    overflow-x: hidden;
+  }
+
+  .cover {
+    width: 760px;
+    min-height: 100vh;
+    background: #e84a8a;
+    background-image:
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d63d7a' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    padding: 40px 30px 60px;
+    position: relative;
+    box-shadow: 8px 8px 30px rgba(0,0,0,0.5);
+  }
+
+  /* Tape strips */
+  .tape {
+    position: absolute;
+    background: rgba(255, 240, 200, 0.55);
+    transform: rotate(var(--rot));
+    z-index: 10;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .tape-1 { width: 120px; height: 28px; top: 18px; left: 40px; --rot: -3deg; }
+  .tape-2 { width: 100px; height: 24px; top: 22px; right: 50px; --rot: 5deg; }
+  .tape-3 { width: 90px; height: 22px; bottom: 40px; left: 60px; --rot: -2deg; }
+
+  /* Title */
+  .title-area {
+    text-align: center;
+    padding: 40px 20px 10px;
+    position: relative;
+  }
+
+  /* Ransom-note style letters */
+  .ransom-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+    transform: rotate(-1deg);
+  }
+  .ransom-letter {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 72px;
+    line-height: 1;
+    padding: 4px 8px;
+    display: inline-block;
+  }
+  .ransom-letter.dark {
+    background: #1a1a1a;
+    color: #fff;
+  }
+  .ransom-letter.light {
+    background: #fff;
+    color: #1a1a1a;
+  }
+  .ransom-letter:nth-child(1) { transform: rotate(-3deg); }
+  .ransom-letter:nth-child(2) { transform: rotate(1deg) translateY(2px); }
+  .ransom-letter:nth-child(3) { transform: rotate(-1deg) translateY(-3px); }
+  .ransom-letter:nth-child(4) { transform: rotate(2deg); }
+  .ransom-letter:nth-child(5) { transform: rotate(-2deg) translateY(4px); font-size: 68px; }
+  .ransom-letter:nth-child(6) { transform: rotate(1deg); }
+  .ransom-letter:nth-child(7) { transform: rotate(-1deg) translateY(-2px); }
+  .ransom-letter:nth-child(8) { transform: rotate(3deg) translateY(3px); }
+
+  .ransom-space {
+    width: 18px;
+  }
+
+  /* AEO EDITION */
+  .edition-title {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 62px;
+    color: #f8b4c8;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    margin: 10px 0 16px;
+    transform: rotate(0.5deg);
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+  }
+
+  /* Subtitle strip - lined paper look */
+  .subtitle-strip {
+    background: #fff;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 27px,
+        #cde 27px,
+        #cde 28px
+      );
+    padding: 18px 30px 22px;
+    margin: 0 30px;
+    position: relative;
+    transform: rotate(-0.5deg);
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.15);
+  }
+  .subtitle-strip::before,
+  .subtitle-strip::after {
+    content: '';
+    position: absolute;
+    width: 90px;
+    height: 28px;
+    background: rgba(210, 190, 150, 0.65);
+    z-index: 5;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  }
+  .subtitle-strip::before {
+    top: -12px;
+    left: 30px;
+    transform: rotate(-4deg);
+  }
+  .subtitle-strip::after {
+    top: -10px;
+    right: 40px;
+    transform: rotate(5deg);
+  }
+
+  .subtitle-text {
+    font-family: 'Caveat', cursive;
+    font-size: 30px;
+    color: #333;
+    line-height: 1.5;
+  }
+  .subtitle-text .circled {
+    display: inline-block;
+    border: 2.5px solid #c0325e;
+    border-radius: 50%;
+    padding: 0 10px;
+    color: #c0325e;
+    font-weight: 700;
+  }
+  .subtitle-text .line2 {
+    font-size: 26px;
+    color: #555;
+  }
+
+  /* Doodles around title */
+  .doodle {
+    position: absolute;
+    font-family: 'Shadows Into Light', cursive;
+    color: rgba(100, 20, 60, 0.35);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .doodle-emoji {
+    position: absolute;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.3;
+  }
+
+  .date-scrawl {
+    font-family: 'Shadows Into Light', cursive;
+    color: rgba(255,255,255,0.4);
+    font-size: 14px;
+    margin-top: 16px;
+    text-align: right;
+    padding-right: 20px;
+  }
+
+  /* Cards */
+  .burn-card {
+    background: #fffef5;
+    margin: 22px 15px;
+    padding: 0;
+    border-radius: 3px;
+    transform: rotate(var(--rot, 0deg));
+    position: relative;
+    box-shadow: 3px 4px 12px rgba(0,0,0,0.25);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  .burn-card:hover {
+    transform: rotate(0deg) scale(1.02);
+    z-index: 5;
+    box-shadow: 6px 8px 20px rgba(0,0,0,0.35);
+  }
+
+  .card-inner {
+    padding: 22px 26px 18px;
+    position: relative;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 27px,
+        #e8e4d9 27px,
+        #e8e4d9 28px
+      );
+    background-position: 0 12px;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .competitor-name {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 32px;
+    color: #c0325e;
+    display: inline-block;
+    transform: rotate(var(--name-rot, -1deg));
+    position: relative;
+    line-height: 1.1;
+  }
+  .competitor-name::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 2px;
+    height: 3px;
+    background: #e84a8a;
+    transform: rotate(-0.5deg);
+    opacity: 0.6;
+  }
+
+  .archetype {
+    font-family: 'Caveat', cursive;
+    font-size: 15px;
+    color: #fff;
+    background: #c0325e;
+    padding: 3px 12px;
+    display: inline-block;
+    transform: rotate(2deg);
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .burn-text {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    color: #333;
+    line-height: 1.45;
+    margin: 6px 0 12px;
+    position: relative;
+  }
+
+  .burn-highlight {
+    background: linear-gradient(180deg, transparent 55%, #ffe04a77 55%);
+    padding: 0 3px;
+  }
+
+  .stats-strip {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1.5px dashed #d4c9b0;
+  }
+
+  .stat-badge {
+    font-family: 'Patrick Hand', cursive;
+    font-size: 13px;
+    color: #666;
+    background: #f5f0e3;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid #d4c9b0;
+    white-space: nowrap;
+  }
+  .stat-badge strong {
+    color: #c0325e;
+    font-size: 15px;
+  }
+
+  .trend-down { color: #cc3333 !important; }
+  .trend-up { color: #28a745 !important; }
+
+  /* Stickers & Doodles */
+  .sticker {
+    position: absolute;
+    font-size: 28px;
+    opacity: 0.85;
+    z-index: 3;
+    transform: rotate(var(--srot, 0deg));
+    filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.15));
+  }
+
+  .card-tape {
+    position: absolute;
+    width: 70px;
+    height: 20px;
+    background: rgba(255, 240, 200, 0.6);
+    top: -8px;
+    z-index: 4;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  .scrawl-note {
+    font-family: 'Shadows Into Light', cursive;
+    color: #c0325e;
+    font-size: 16px;
+    position: absolute;
+    transform: rotate(var(--nrot, -5deg));
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  /* Arrow doodle */
+  .arrow-doodle {
+    font-family: 'Caveat', cursive;
+    color: #c0325e;
+    font-size: 15px;
+    position: absolute;
+    opacity: 0.5;
+    white-space: nowrap;
+  }
+
+  /* The AirOps card (golden) */
+  .airops-card {
+    background: linear-gradient(135deg, #fdf6e3, #fff9e6, #fdf6e3);
+    border: 3px solid #e8c640;
+    box-shadow: 0 0 20px rgba(232, 196, 64, 0.3), 4px 5px 14px rgba(0,0,0,0.2);
+  }
+  .airops-card .competitor-name {
+    color: #2a6041;
+    font-size: 36px;
+  }
+  .airops-card .competitor-name::after {
+    background: #2a6041;
+  }
+  .airops-card .archetype {
+    background: #2a6041;
+  }
+  .airops-card .burn-text {
+    color: #1a3a28;
+  }
+  .airops-card .stat-badge strong {
+    color: #2a6041;
+  }
+
+  /* Crown for AirOps */
+  .crown {
+    font-size: 40px;
+    position: absolute;
+    top: -14px;
+    right: 20px;
+    z-index: 10;
+    animation: crownBob 2s ease-in-out infinite;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+  }
+  @keyframes crownBob {
+    0%, 100% { transform: translateY(0) rotate(8deg); }
+    50% { transform: translateY(-4px) rotate(12deg); }
+  }
+
+  /* Divider */
+  .section-divider {
+    text-align: center;
+    margin: 30px 0 10px;
+    position: relative;
+  }
+  .section-label {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 26px;
+    color: #fff;
+    text-shadow: 2px 2px 0 #8b1a4a;
+    display: inline-block;
+    background: #e84a8a;
+    padding: 2px 20px;
+    transform: rotate(-1deg);
+  }
+
+  /* Hearts decoration */
+  .heart-trail {
+    position: absolute;
+    color: rgba(255,255,255,0.15);
+    font-size: 20px;
+    pointer-events: none;
+  }
+
+  /* Bottom note */
+  .bottom-note {
+    text-align: center;
+    font-family: 'Shadows Into Light', cursive;
+    color: rgba(255,255,255,0.35);
+    font-size: 16px;
+    margin-top: 30px;
+    padding-bottom: 20px;
+  }
+
+  .xo {
+    font-family: 'Permanent Marker', cursive;
+    color: rgba(255,255,255,0.25);
+    font-size: 28px;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="cover">
+  <div class="tape tape-1"></div>
+  <div class="tape tape-2"></div>
+  <div class="tape tape-3"></div>
+
+  <!-- Doodles around title area -->
+  <span class="doodle" style="top:30px; left:18px; font-size:40px; transform:rotate(-10deg);">&#x1f441;</span>
+  <span class="doodle" style="top:55px; left:15px; font-size:16px; transform:rotate(-5deg);">xoxo</span>
+  <span class="doodle" style="top:30px; left:90px; font-size:14px; transform:rotate(8deg);">fearless</span>
+  <span class="doodle" style="top:22px; right:20px; font-size:36px; transform:rotate(5deg); color:rgba(200,40,60,0.3);">&#x1f48b;</span>
+  <span class="doodle" style="top:65px; right:15px; font-size:13px; transform:rotate(-3deg);">baddie</span>
+  <span class="doodle" style="top:140px; left:10px; font-size:14px; transform:rotate(-8deg);">&#x2728; &#x2728;</span>
+  <span class="doodle" style="top:160px; right:12px; font-size:18px; transform:rotate(12deg);">&#x2665; &#x2665;</span>
+  <span class="doodle" style="bottom:320px; left:14px; font-size:32px; transform:rotate(5deg);">&#x1f441;</span>
+  <span class="doodle" style="bottom:340px; left:12px; font-size:14px; transform:rotate(-3deg);">xoxo</span>
+  <span class="doodle" style="bottom:300px; right:16px; font-size:24px; transform:rotate(-8deg);">&#x2665;</span>
+
+  <div class="title-area">
+    <div class="ransom-title">
+      <span class="ransom-letter dark">B</span>
+      <span class="ransom-letter light">U</span>
+      <span class="ransom-letter dark">R</span>
+      <span class="ransom-letter light">N</span>
+      <span class="ransom-space"></span>
+      <span class="ransom-letter dark">B</span>
+      <span class="ransom-letter light">O</span>
+      <span class="ransom-letter dark">O</span>
+      <span class="ransom-letter light">K</span>
+    </div>
+    <div class="edition-title">AEO Edition</div>
+    <div class="subtitle-strip">
+      <div class="subtitle-text">
+        who's <span class="circled">ACTUALLY</span> getting cited by AI?
+        <br>
+        <span class="line2">...and who's just getting mentioned</span>
+      </div>
+    </div>
+  </div>
+  <div class="date-scrawl">Nov '25 &mdash; Feb '26 data &bull; do NOT let this get out</div>
+
+  <!-- SECTION: THE POPULAR TABLE -->
+  <div class="section-divider">
+    <span class="section-label">&#x1f451; THE "PLASTICS"</span>
+  </div>
+
+  <!-- SurferSEO -->
+  <div class="burn-card" style="--rot: -0.8deg;">
+    <div class="card-tape" style="left: 40px; transform: rotate(3deg);"></div>
+    <div class="sticker" style="top:8px; right:14px; --srot:12deg;">&#x1f484;</div>
+    <div class="card-inner">
+      <div class="card-header">
+        <span class="competitor-name" style="--name-rot:-1.5deg;">SurferSEO</span>
+        <span class="archetype">&#x1f451; Regina George</span>
+      </div>
+      <div class="burn-text">
+        Thinks she runs the school. <span class="burn-highlight">36.8% share of voice</span> and struts around AI answers at position 1.73. But here's the thing - her <span class="burn-highlight">mention rate is sliding</span> (5.58% &rarr; 5.18%). The crown is slipping and she doesn't even know it yet.
+      </div>
+      <div class="stats-strip">
+        <span class="stat-badge">SOV: <strong>36.8%</strong></span>
+        <span class="stat-badge">Citations: <strong>7.71%</strong></span>
+        <span class="stat-badge">Mentions: <strong class="trend-down">5.18% &darr;</strong></span>
+        <span class="stat-badge">Avg Pos: <strong>1.73</strong></span>
+        <span class="stat-badge">Sentiment: <strong>72</strong> &bull; mid</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WriteSonic -->
+  <div class="burn-card" style="--rot: 0.6deg;">
+    <div class="card-tape" style="right: 55px; transform: rotate(-2deg);"></div>
+    <div class="sticker" style="bottom:10px; right:16px; --srot:-8deg;">&#x1f485;</div>
+    <div class="card-inner">
+      <div class="card-header">
+        <span class="competitor-name" style="--name-rot:0.5deg;">WriteSonic</span>
+        <span class="archetype">&#x1f4a8; The Try-Hard</span>
+      </div>
+      <div class="burn-text">
+        Showed up to school in a limo but lives in a two-bedroom. <span class="burn-highlight">23.75% SOV</span> with a 7.66% citation rate, which sounds impressive until you realize her mention rate <span class="burn-highlight">dropped from 5.82% to 3.34%</span>. The AI models are literally forgetting her name mid-conversation. Brutal.
+      </div>
+      <div class="stats-strip">
+        <span class="stat-badge">SOV: <strong>23.75%</strong></span>
+        <span class="stat-badge">Citations: <strong>7.66%</strong></span>
+        <span class="stat-badge">Mentions: <strong class="trend-down">3.34% &darr;&darr;</strong></span>
+        <span class="stat-badge">Sentiment: <strong>74</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profound -->
+  <div class="burn-card" style="--rot: -0.5deg;">
+    <div class="card-tape" style="left: 90px; transform: rotate(1deg);"></div>
+    <div class="sticker" style="top:6px; right:18px; --srot:15deg;">&#x1f4ac;</div>
+    <div class="scrawl-note" style="bottom:60px; right:20px; --nrot:4deg;">all talk!!</div>
+    <div class="card-inner">
+      <div class="card-header">
+        <span class="competitor-name" style="--name-rot:-0.8deg;">Profound</span>
+        <span class="archetype">&#x1f399;&#xfe0f; The Gossip</span>
+      </div>
+      <div class="burn-text">
+        Most talked about in the whole school at <span class="burn-highlight">38.79% SOV</span> and #1 avg position (1.45). Sounds amazing right? Except when AI actually needs to <em>cite a source</em>, Profound gets picked only <span class="burn-highlight">1.97% of the time</span>. That's the AI equivalent of getting invited to every party but nobody remembers your last name.
+      </div>
+      <div class="stats-strip">
+        <span class="stat-badge">SOV: <strong>38.79%</strong> &#x1f525;</span>
+        <span class="stat-badge">Citation: <strong class="trend-down">1.97%</strong> &#x1f480;</span>
+        <span class="stat-badge">Mentions: <strong>5.46%</strong></span>
+        <span class="stat-badge">Position: <strong>1.45</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Peec AI -->
+  <div class="burn-card" style="--rot: 0.9deg;">
+    <div class="card-tape" style="left: 30px; transform: rotate(-3deg);"></div>
+    <div class="sticker" style="top:12px; right:12px; --srot:-10deg;">&#x1f440;</div>
+    <div class="card-inner">
+      <div class="card-header">
+        <span class="competitor-name" style="--name-rot:1deg;">Peec AI</span>
+        <span class="archetype">&#x1f47b; The Ghost</span>
+      </div>
+      <div class="burn-text">
+        Gets name-dropped <span class="burn-highlight">30.87% SOV</span> and 4.34% mention rate. But her citation rate? <span class="burn-highlight">0.18%</span>. ZERO. POINT. ONE. EIGHT. AI will literally mention Peec and then cite someone else's homework. That's not popularity, that's pity mentions.
+      </div>
+      <div class="stats-strip">
+        <span class="stat-badge">SOV: <strong>30.87%</strong></span>
+        <span class="stat-badge">Citation: <strong class="trend-down">0.18%</strong> &#x1f4a9;</span>
+        <span class="stat-badge">Mentions: <strong>4.34%</strong></span>
+        <span class="stat-badge">Sentiment: <strong>70</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: THE WANNABES -->
+  <div class="section-divider">
+    <span class="section-label">&#x1f46f; THE WANNABES</span>
+  </div>
+
+  <!-- Clearscope -->
+  <div class="burn-card" style="--rot: -1deg;">
+    <div class="card-tape" style="right: 40px; transform: rotate(4deg);"></div>
+    <div class="sticker" style="bottom:14px; left:14px; --srot:-5deg;">&#x2744;&#xfe0f;</div>
+    <div class="card-inner">
+      <div class="card-header">
+        <span class="competitor-name" style="--name-rot:-1deg;">Clearscope</span>
+        <span class="archetype">&#x1f9ca; Ice Cold</span>
+      </div>
+      <div class="burn-text">
+        17% SOV looks fine on paper until you see the <span class="burn-highlight">0.0% citation rate</span>. That is not a typo. Zero. AI models will talk about Clearscope all day long and then link to literally anyone else. It's giving "I know her but I wouldn't sit with her."
+      </div>
+      <div class="stats-strip">
+        <span class="stat-badge">SOV: <strong>17.04%</strong></span>
+        <span class="stat-badge">Citation: <strong class="trend-down">0.0%</strong> &#x1f480;&#x1f480;</span>
+        <span class="stat-badge">Mentions: <strong class="trend-down">2.4% &darr;</strong></span>
+        <span class="stat-badge">Sentiment: <strong>73</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Jasper -->
+  <div class="burn-card" style="--rot: 0.4deg;">
+    <div class="card-tape" style="left: 60px; transform: rotate(-1deg);"></div>
+    <div class="card-inner">
+      <div class="card-header">
+        <span class="competitor-name" style="--name-rot:0.5deg;">Jasper</span>
+        <span class="archetype">&#x1f4c9; Fading Fast</span>
+      </div>
+      <div class="burn-text">
+        Remember when Jasper was the main character? Yeah, AI doesn't either. <span class="burn-highlight">Mention rate dropped from 2.2% to 1.79%</span>. 12.74% SOV is mid at best. At least her sentiment is 75 - AI still says nice things about her even as it slowly stops inviting her places.
+      </div>
+      <div class="stats-strip">
+        <span class="stat-badge">SOV: <strong>12.74%</strong></span>
+        <span class="stat-badge">Citation: <strong>1.69%</strong></span>
+        <span class="stat-badge">Mentions: <strong class="trend-down">1.79% &darr;</strong></span>
+        <span class="stat-badge">Sentiment: <strong>76</strong> &bull; nice</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Frase -->
+  <div class="burn-card" style="--rot: -0.7deg;">
+    <div class="card-tape" style="right: 35px; transform: rotate(2deg);"></div>
+    <div class="sticker" style="top:10px; right:16px; --srot:8deg;">&#x1f937;</div>
+    <div class="card-inner">
+      <div class="card-header">
+        <span class="competitor-name" style="--name-rot:-0.5deg;">Frase</span>
+        <span class="archetype">&#x1f6cb;&#xfe0f; The Benchwarmer</span>
+      </div>
+      <div class="burn-text">
+        13.62% SOV, 0.85% citation rate, <span class="burn-highlight">mention rate dropping from 2.45% to 1.92%</span>. Frase is like the kid who shows up to tryouts every year and still doesn't make the team. Points for persistence I guess?
+      </div>
+      <div class="stats-strip">
+        <span class="stat-badge">SOV: <strong>13.62%</strong></span>
+        <span class="stat-badge">Citation: <strong>0.85%</strong></span>
+        <span class="stat-badge">Mentions: <strong class="trend-down">1.92% &darr;</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MarketMuse -->
+  <div class="burn-card" style="--rot: 0.5deg;">
+    <div class="card-tape" style="left: 45px; transform: rotate(-2deg);"></div>
+    <div class="scrawl-note" style="top:14px; right:16px; --nrot:6deg;">lol remember them?</div>
+    <div class="card-inner">
+      <div class="card-header">
+        <span class="competitor-name" style="--name-rot:0.8deg;">MarketMuse</span>
+        <span class="archetype">&#x1f3db;&#xfe0f; Class of 2019</span>
+      </div>
+      <div class="burn-text">
+        Still showing up to school dances even though she graduated years ago. <span class="burn-highlight">0.01% citation rate</span> - that's one out of TEN THOUSAND. AI models have literally better odds of citing a random Reddit post. But hey, sentiment is 77, so at least they're being nice about it.
+      </div>
+      <div class="stats-strip">
+        <span class="stat-badge">SOV: <strong>12.73%</strong></span>
+        <span class="stat-badge">Citation: <strong class="trend-down">0.01%</strong> &#x1f47b;</span>
+        <span class="stat-badge">Sentiment: <strong>77</strong> &bull; pity nice</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scrunch AI -->
+  <div class="burn-card" style="--rot: -0.6deg;">
+    <div class="card-tape" style="right: 65px; transform: rotate(3deg);"></div>
+    <div class="card-inner">
+      <div class="card-header">
+        <span class="competitor-name" style="--name-rot:-0.3deg;">Scrunch AI</span>
+        <span class="archetype">&#x1f576;&#xfe0f; Who?</span>
+      </div>
+      <div class="burn-text">
+        13.38% SOV and a <span class="burn-highlight">0.0% citation rate</span>. Another member of the "AI mentions my name but would never bring me home to meet the sources" club. Sentiment at 66 is the AI equivalent of a polite nod in the hallway.
+      </div>
+      <div class="stats-strip">
+        <span class="stat-badge">SOV: <strong>13.38%</strong></span>
+        <span class="stat-badge">Citation: <strong class="trend-down">0.0%</strong></span>
+        <span class="stat-badge">Sentiment: <strong class="trend-down">66</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: THE INVISIBLES -->
+  <div class="section-divider">
+    <span class="section-label">&#x1f47b; THE INVISIBLE ONES</span>
+  </div>
+
+  <!-- Copy.ai -->
+  <div class="burn-card" style="--rot: 0.3deg;">
+    <div class="card-tape" style="left: 50px; transform: rotate(-1deg);"></div>
+    <div class="card-inner">
+      <div class="card-header">
+        <span class="competitor-name" style="--name-rot:0.3deg;">Copy.ai</span>
+        <span class="archetype">&#x1f4cb; The Group Project Freeloader</span>
+      </div>
+      <div class="burn-text">
+        <span class="burn-highlight">7% SOV, under 1% mention rate</span>. Raised $50M+ and AI search treats her like a substitute teacher. <span class="burn-highlight">Mentions dropped from 1.5% to 0.99%</span>. That's not a dip, that's a disappearing act.
+      </div>
+      <div class="stats-strip">
+        <span class="stat-badge">SOV: <strong>7.06%</strong></span>
+        <span class="stat-badge">Citation: <strong>1.11%</strong></span>
+        <span class="stat-badge">Mentions: <strong class="trend-down">0.99% &darr;</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Writer, Outrank, xFunnel grouped -->
+  <div class="burn-card" style="--rot: -0.4deg;">
+    <div class="card-tape" style="right: 45px; transform: rotate(2deg);"></div>
+    <div class="sticker" style="bottom:12px; right:14px; --srot:-12deg;">&#x1f3f7;&#xfe0f;</div>
+    <div class="card-inner">
+      <div class="card-header">
+        <span class="competitor-name" style="--name-rot:-0.5deg; font-size:26px;">Writer &bull; Outrank &bull; xFunnel</span>
+        <span class="archetype">&#x1f4a4; Did Not Show Up</span>
+      </div>
+      <div class="burn-text">
+        Combined SOV of <span class="burn-highlight">3.62%</span>. Between the THREE of them. Writer has 0.16% mentions, Outrank has 0.14%, xFunnel has 0.21%. These aren't competitors, they're background extras. AI search doesn't even know they go here.
+      </div>
+      <div class="stats-strip">
+        <span class="stat-badge">Writer SOV: <strong>1.15%</strong></span>
+        <span class="stat-badge">Outrank SOV: <strong>0.97%</strong></span>
+        <span class="stat-badge">xFunnel SOV: <strong>1.5%</strong></span>
+        <span class="stat-badge">Combined: <strong class="trend-down">&#x1f4a4;</strong></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: THE MAIN CHARACTER -->
+  <div class="section-divider">
+    <span class="section-label">&#x1f48e; THE MAIN CHARACTER</span>
+  </div>
+
+  <!-- AirOps -->
+  <div class="burn-card airops-card" style="--rot: 0deg;">
+    <div class="crown">&#x1f451;</div>
+    <div class="card-tape" style="left: 80px; transform: rotate(-2deg);"></div>
+    <div class="card-tape" style="right: 60px; transform: rotate(3deg);"></div>
+    <div class="card-inner">
+      <div class="card-header">
+        <span class="competitor-name" style="--name-rot:0deg;">AirOps</span>
+        <span class="archetype">&#x1f48e; Cady Heron Energy</span>
+      </div>
+      <div class="burn-text">
+        Quiet entrance. Doesn't need to scream. <span class="burn-highlight">9.59% citation rate - the HIGHEST of anyone</span>. When AI search actually needs to back up what it says with a real source? It picks AirOps. SOV is 9.54% and climbing from a "just transferred here" position. The difference? Everyone else is fighting for mentions. AirOps is earning <em>citations</em>. That's the difference between being talked about and being trusted. And we all know how the movie ends. &#x1f48b;
+      </div>
+      <div class="stats-strip">
+        <span class="stat-badge">Citation Rate: <strong class="trend-up">9.59% &#x1f451;</strong></span>
+        <span class="stat-badge">SOV: <strong>9.54%</strong></span>
+        <span class="stat-badge">Mentions: <strong>1.34%</strong></span>
+        <span class="stat-badge">Avg Pos: <strong>1.67</strong></span>
+        <span class="stat-badge">Sentiment: <strong>63</strong> &bull; we're edgy</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-note">
+    this burn book is property of the brand team<br>
+    if found, please return to the AirOps marketing table in the cafeteria
+    <div class="xo">xo xo</div>
+  </div>
+
+</div>
+</body>
+</html>
