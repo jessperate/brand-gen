@@ -5,6 +5,7 @@ import { tools, allTags, type Tool, type ToolTag } from '@/lib/tools'
 import ToolCard from '@/components/ToolCard'
 import ToolModal from '@/components/ToolModal'
 import SplashScreen from '@/components/SplashScreen'
+import HeroHeader from '@/components/HeroHeader'
 
 export default function Home() {
   const [activeTag, setActiveTag] = useState<ToolTag | 'All'>('All')
@@ -16,6 +17,7 @@ export default function Home() {
   return (
     <>
       {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
+      <HeroHeader animate={splashDone} />
     <main style={{ padding: '32px 24px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Filter pills */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '28px', flexWrap: 'wrap' }}>
