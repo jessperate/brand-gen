@@ -34,7 +34,7 @@ export const tools: Tool[] = [
     name: 'Page360',
     description: 'Full-page brand and content audit tool',
     tag: 'Enablement',
-    url: 'https://page360.vercel.app',
+    url: 'https://jessperate.github.io/airops-enablement/',
     status: 'live',
     bgColor: '#F8FFFA',
   },
