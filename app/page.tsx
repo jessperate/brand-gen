@@ -4,14 +4,18 @@ import { useState } from 'react'
 import { tools, allTags, type Tool, type ToolTag } from '@/lib/tools'
 import ToolCard from '@/components/ToolCard'
 import ToolModal from '@/components/ToolModal'
+import SplashScreen from '@/components/SplashScreen'
 
 export default function Home() {
   const [activeTag, setActiveTag] = useState<ToolTag | 'All'>('All')
   const [activeTool, setActiveTool] = useState<Tool | null>(null)
+  const [splashDone, setSplashDone] = useState(false)
 
   const filtered = activeTag === 'All' ? tools : tools.filter((t) => t.tag === activeTag)
 
   return (
+    <>
+      {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
     <main style={{ padding: '32px 24px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Filter pills */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '28px', flexWrap: 'wrap' }}>
@@ -60,5 +64,6 @@ export default function Home() {
         <ToolModal tool={activeTool} onClose={() => setActiveTool(null)} />
       )}
     </main>
+    </>
   )
 }
