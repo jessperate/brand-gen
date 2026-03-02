@@ -31,7 +31,7 @@ export const tools: Tool[] = [
   },
   {
     id: 'page360',
-    name: 'Page360',
+    name: 'AirOps Enablement Hub',
     description: 'Full-page brand and content audit tool',
     tag: 'Enablement',
     url: 'https://jessperate.github.io/airops-enablement/',
