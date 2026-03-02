@@ -5,19 +5,21 @@ import { tools, allTags, type Tool, type ToolTag } from '@/lib/tools'
 import ToolCard from '@/components/ToolCard'
 import ToolModal from '@/components/ToolModal'
 import SplashScreen from '@/components/SplashScreen'
+import TerminalSplash from '@/components/TerminalSplash'
 import HeroHeader from '@/components/HeroHeader'
 
 export default function Home() {
   const [activeTag, setActiveTag] = useState<ToolTag | 'All'>('All')
   const [activeTool, setActiveTool] = useState<Tool | null>(null)
-  const [splashDone, setSplashDone] = useState(false)
+  const [phase, setPhase] = useState<'lottie' | 'terminal' | 'main'>('lottie')
 
   const filtered = activeTag === 'All' ? tools : tools.filter((t) => t.tag === activeTag)
 
   return (
     <>
-      {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
-      <HeroHeader animate={splashDone} />
+      {phase === 'lottie' && <SplashScreen onDone={() => setPhase('terminal')} />}
+      {phase === 'terminal' && <TerminalSplash onDone={() => setPhase('main')} />}
+      <HeroHeader animate={phase === 'main'} />
     <main style={{ padding: '32px 24px', maxWidth: '1200px', margin: '0 auto' }}>
       {/* Filter pills */}
       <div style={{ display: 'flex', gap: '8px', marginBottom: '28px', flexWrap: 'wrap' }}>
