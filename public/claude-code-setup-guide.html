@@ -52,21 +52,25 @@
     justify-content: space-between;
     gap: 32px;
     position: relative;
+    z-index: 5;
     box-shadow: inset 0 -80px 160px rgba(0,255,100,0.06), inset 0 0 240px rgba(0,255,100,0.03);
   }
 
   .page-header-text {
     flex: 1;
     min-width: 0;
+    padding-right: 240px;
   }
 
   .page-header-image {
-    flex-shrink: 0;
-    align-self: flex-end;
-    height: 180px;
+    position: absolute;
+    right: 64px;
+    bottom: -60px;
+    height: 280px;
     width: auto;
     display: block;
-    filter: drop-shadow(0 0 24px rgba(0,255,100,0.25)) drop-shadow(0 0 8px rgba(0,255,100,0.15));
+    z-index: 10;
+    filter: drop-shadow(0 0 32px rgba(0,255,100,0.3)) drop-shadow(0 0 12px rgba(0,255,100,0.2));
   }
 
   .page-header .eyebrow {
@@ -568,7 +572,10 @@
       gap: 16px;
     }
     .page-header-image {
-      height: 120px;
+      display: none;
+    }
+    .page-header-text {
+      padding-right: 0;
     }
   }
 </style>
