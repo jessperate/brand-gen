@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Code Setup Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap');
+
+  :root {
+    --white: #ffffff;
+    --off-white: #F8FFFA;
+    --near-black: #000d05;
+    --green-100: #dfeae3;
+    --green-200: #CCFFE0;
+    --green-500: #008c44;
+    --green-600: #002910;
+    --interaction: #00ff64;
+    --accent-label: #EEFF8C;
+    --text-primary: #09090b;
+    --text-secondary: #676c79;
+    --stroke-green: #d4e8da;
+    --terminal-bg: #0b0e16;
+    --terminal-border: #1e2530;
+    --font-sans: 'DM Sans', 'Helvetica Neue', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--white);
+    color: var(--text-primary);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+
+  /* Page header */
+  .page-header {
+    background: var(--green-600);
+    padding: 48px 64px 40px;
+    border-bottom: 3px solid var(--interaction);
+  }
+
+  .page-header .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--interaction);
+    margin-bottom: 16px;
+  }
+
+  .page-header h1 {
+    font-family: Georgia, serif;
+    font-size: 48px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .page-header .subtitle {
+    color: #a5aab6;
+    font-size: 16px;
+    max-width: 520px;
+  }
+
+  /* Main layout */
+  .content {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 64px 80px;
+  }
+
+  /* Prereqs bar */
+  .prereqs-bar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 20px 24px;
+    background: var(--off-white);
+    border: 1px solid var(--stroke-green);
+    margin-bottom: 48px;
+  }
+
+  .prereqs-bar .label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    align-self: center;
+    margin-right: 4px;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    background: var(--accent-label);
+    border: 1px solid var(--stroke-green);
+    border-radius: 0;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--near-black);
+  }
+
+  .pill.green {
+    background: var(--green-200);
+  }
+
+  /* Step */
+  .step {
+    margin-bottom: 52px;
+    border-top: 1px solid var(--stroke-green);
+    padding-top: 36px;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .step-number {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: var(--near-black);
+    padding: 6px 10px;
+    flex-shrink: 0;
+    min-width: 44px;
+    text-align: center;
+  }
+
+  .step-title {
+    font-family: Georgia, serif;
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--near-black);
+    line-height: 1.2;
+  }
+
+  .step-body {
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.65;
+    margin-bottom: 20px;
+    padding-left: 64px;
+  }
+
+  .step-body p + p { margin-top: 10px; }
+
+  .step-body a {
+    color: var(--green-500);
+    text-decoration: none;
+    border-bottom: 1px solid var(--green-200);
+  }
+
+  /* Terminal block */
+  .terminal {
+    margin: 20px 0 20px 64px;
+    border: 1px solid var(--terminal-border);
+    background: var(--terminal-bg);
+    overflow: hidden;
+  }
+
+  .terminal-bar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 16px;
+    background: #151920;
+    border-bottom: 1px solid var(--terminal-border);
+  }
+
+  .terminal-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+  }
+  .dot-red    { background: #ff5f57; }
+  .dot-yellow { background: #ffbd2e; }
+  .dot-green  { background: #28ca41; }
+
+  .terminal-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #5a6375;
+    margin-left: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  .terminal-body {
+    padding: 20px 24px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  .terminal-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .prompt {
+    color: var(--interaction);
+    user-select: none;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .cmd { color: #e2e8f0; }
+  .cmd .flag { color: #7dd3fc; }
+  .cmd .string { color: #fde68a; }
+  .cmd .comment {
+    color: #4b5563;
+    font-style: italic;
+  }
+  .cmd .success { color: var(--interaction); }
+  .cmd .version { color: #a78bfa; }
+  .cmd .path { color: #f9a8d4; }
+
+  .terminal-line + .terminal-line { margin-top: 2px; }
+  .terminal-gap { height: 12px; }
+
+  /* Output lines (no prompt) */
+  .output-line {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: #6b7280;
+    padding-left: 20px;
+    line-height: 1.8;
+  }
+
+  /* Callout / note */
+  .callout {
+    display: flex;
+    gap: 14px;
+    padding: 16px 20px;
+    border: 1px solid var(--stroke-green);
+    background: var(--off-white);
+    margin: 20px 0 0 64px;
+  }
+
+  .callout-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .callout-text {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  .callout-text strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .callout.warn {
+    border-color: #f59e0b;
+    background: #fffbeb;
+  }
+
+  /* Account cards */
+  .accounts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-left: 64px;
+    margin-bottom: 4px;
+  }
+
+  .account-card {
+    border: 1px solid var(--stroke-green);
+    padding: 20px;
+    background: var(--white);
+  }
+
+  .account-card .acct-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+  }
+
+  .account-card .acct-name {
+    font-family: Georgia, serif;
+    font-size: 19px;
+    font-weight: 400;
+    color: var(--near-black);
+    margin-bottom: 8px;
+  }
+
+  .account-card .acct-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .account-card .acct-url {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--green-500);
+    text-decoration: none;
+    border-bottom: 1px solid var(--green-200);
+  }
+
+  .required-badge {
+    display: inline-block;
+    padding: 3px 7px;
+    background: var(--accent-label);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--near-black);
+    margin-bottom: 10px;
+  }
+
+  /* Reference table */
+  .ref-table {
+    width: calc(100% - 64px);
+    margin-left: 64px;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  .ref-table th {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-align: left;
+    padding: 8px 16px;
+    background: var(--off-white);
+    border: 1px solid var(--stroke-green);
+  }
+
+  .ref-table td {
+    padding: 10px 16px;
+    border: 1px solid var(--stroke-green);
+    vertical-align: top;
+  }
+
+  .ref-table td:first-child {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--interaction);
+    background: var(--terminal-bg);
+    white-space: nowrap;
+  }
+
+  .ref-table td:last-child {
+    color: var(--text-secondary);
+  }
+
+  /* Section divider */
+  .section-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin-bottom: 28px;
+    margin-top: 60px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--stroke-green);
+  }
+
+  /* Footer */
+  .footer {
+    background: var(--near-black);
+    padding: 24px 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-text {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #4b5563;
+    letter-spacing: 0.04em;
+  }
+
+  .footer-bar {
+    height: 3px;
+    background: linear-gradient(90deg, var(--interaction) 0%, var(--green-500) 60%, transparent 100%);
+    width: 100%;
+  }
+
+  /* Trouble blocks */
+  .trouble-block {
+    margin-bottom: 40px;
+    padding: 28px 28px 24px;
+    border: 1px solid var(--stroke-green);
+    background: var(--white);
+  }
+
+  .trouble-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .trouble-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--near-black);
+    background: var(--accent-label);
+    padding: 5px 9px;
+    flex-shrink: 0;
+  }
+
+  .trouble-title {
+    font-family: Georgia, serif;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--near-black);
+    line-height: 1.3;
+    padding-top: 2px;
+  }
+
+  .trouble-body {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+
+  .trouble-body strong { color: var(--text-primary); }
+
+  .trouble-block .terminal { margin-left: 0; }
+  .trouble-block .callout { margin-left: 0; }
+
+  @media print {
+    .content { padding: 32px; }
+    .page-header { padding: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="eyebrow">Internal Guide // Engineering Setup</div>
+  <h1>Getting set up on<br>Claude Code</h1>
+  <div class="subtitle">A step-by-step walkthrough for Mac terminal. First time? Start here.</div>
+</div>
+
+<div class="content">
+
+  <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;background:var(--near-black);border:1px solid var(--interaction);margin-bottom:16px;">
+    <span style="font-size:18px;">📅</span>
+    <div>
+      <span style="font-family:var(--font-mono);font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--interaction);">Every Friday</span>
+      <span style="font-family:var(--font-sans);font-size:14px;color:#e2e8f0;margin-left:10px;font-weight:600;">Vibe Coding Office Hours</span>
+      <span style="font-family:var(--font-sans);font-size:14px;color:#6b7280;margin-left:8px;">-- DM Jess to be added to the cal invite</span>
+    </div>
+  </div>
+
+  <div class="prereqs-bar">
+    <span class="label">You need</span>
+    <span class="pill">Paid Claude Plan</span>
+    <span class="pill">macOS 10.15+</span>
+    <span class="pill">GitHub account</span>
+    <span class="pill">Vercel account</span>
+    <span class="pill green">~30 min</span>
+  </div>
+
+  <!-- ACCOUNTS -->
+  <div class="section-title">Accounts to set up first</div>
+
+  <div class="accounts-grid">
+    <div class="account-card">
+      <div class="required-badge">Required</div>
+      <div class="acct-name">Claude.ai <span style="color:#008c44;font-size:16px;">✓</span></div>
+      <div class="acct-desc">You need a paid plan (Pro, Max, Teams, or Enterprise). Free accounts don't include Claude Code.</div>
+      <a class="acct-url" href="https://claude.ai" target="_blank">claude.ai →</a>
+    </div>
+    <div class="account-card">
+      <div class="required-badge">Required</div>
+      <div class="acct-name">GitHub</div>
+      <div class="acct-desc">Where your code lives. Free tier is fine. Use the same email here as everywhere else.</div>
+      <a class="acct-url" href="https://github.com" target="_blank">github.com →</a>
+    </div>
+    <div class="account-card">
+      <div class="required-badge">Required</div>
+      <div class="acct-name">Vercel</div>
+      <div class="acct-desc">How you deploy projects. Sign up with your GitHub account so they connect automatically.</div>
+      <a class="acct-url" href="https://vercel.com" target="_blank">vercel.com →</a>
+    </div>
+  </div>
+
+  <!-- STEPS -->
+  <div class="section-title" style="margin-top:52px">Installation steps</div>
+
+  <!-- Step 1: Check macOS -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">01</div>
+      <div class="step-title">Check your macOS version</div>
+    </div>
+    <div class="step-body">
+      <p>Claude Code requires macOS 10.15 or later. If your Mac is from the last 5 years, you're fine. To verify: Apple menu &rarr; About This Mac.</p>
+      <p>Then open Terminal. Press <strong>⌘ + Space</strong>, type "Terminal", hit Enter.</p>
+    </div>
+  </div>
+
+  <!-- Step 2: Homebrew -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">02</div>
+      <div class="step-title">Install Homebrew</div>
+    </div>
+    <div class="step-body">
+      <p>Homebrew is a package manager for Mac. It makes installing developer tools much easier. Skip this step if you already have it (<code style="font-family:var(--font-mono);font-size:12px;background:#f3f4f6;padding:2px 5px;">brew --version</code> will tell you).</p>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">/bin/bash -c <span class="string">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</span></span>
+        </div>
+        <div class="terminal-gap"></div>
+        <div class="output-line">==> Checking for <span style="color:#7dd3fc">sudo</span> access (which may request your password)...</div>
+        <div class="output-line">==> This script will install:</div>
+        <div class="output-line">&nbsp;&nbsp;&nbsp;/usr/local/bin/brew</div>
+        <div class="output-line" style="color:#28ca41">==> Installation successful!</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-icon">💡</div>
+      <div class="callout-text">When prompted for your password, type it and press Enter. Nothing will appear on screen -- that's normal. Homebrew will take a few minutes.</div>
+    </div>
+  </div>
+
+  <!-- Step 3: Node.js -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">03</div>
+      <div class="step-title">Install Node.js</div>
+    </div>
+    <div class="step-body">
+      <p>Node.js lets you run JavaScript-based tools like Claude Code on your machine. You need version 18 or higher.</p>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">brew install node</span>
+        </div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">node <span class="flag">--version</span></span>
+        </div>
+        <div class="output-line"><span class="version">v22.14.0</span> <span class="comment"># any v18+ is fine</span></div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">npm <span class="flag">--version</span></span>
+        </div>
+        <div class="output-line"><span class="version">10.9.2</span></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-icon">✅</div>
+      <div class="callout-text"><strong>Both commands should return a version number.</strong> If you see "command not found," close Terminal, reopen it, and try again.</div>
+    </div>
+  </div>
+
+  <!-- Step 4: Claude Code -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">04</div>
+      <div class="step-title">Install Claude Code</div>
+    </div>
+    <div class="step-body">
+      <p>The native installer is the recommended path. One command, no extra dependencies, auto-updates in the background.</p>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">curl <span class="flag">-fsSL</span> https://claude.ai/install.sh | bash</span>
+        </div>
+        <div class="terminal-gap"></div>
+        <div class="output-line">==> Downloading Claude Code...</div>
+        <div class="output-line">==> Installing to /usr/local/bin/claude</div>
+        <div class="output-line" style="color:#28ca41">==> Claude Code installed successfully</div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">claude <span class="flag">--version</span></span>
+        </div>
+        <div class="output-line"><span class="version">2.1.71</span></div>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-text"><strong>Don't use <code style="font-family:var(--font-mono);font-size:12px;">sudo npm install -g</code>.</strong> This causes permission issues and security risks. Use the curl installer above, or Homebrew: <code style="font-family:var(--font-mono);font-size:12px;">brew install --cask claude-code</code></div>
+    </div>
+  </div>
+
+  <!-- Step 5: Authenticate -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">05</div>
+      <div class="step-title">Authenticate with your Claude account</div>
+    </div>
+    <div class="step-body">
+      <p>Run Claude for the first time. It will open a browser window for you to log in with your Claude.ai credentials.</p>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">claude</span>
+        </div>
+        <div class="output-line">Opening browser for authentication...</div>
+        <div class="output-line"><span style="color:#7dd3fc">https://claude.ai/auth/cli?token=xxxx</span></div>
+        <div class="output-line"><span class="comment"># hold ⌘ + click to open if it doesn't launch automatically</span></div>
+        <div class="terminal-gap"></div>
+        <div class="output-line" style="color:#28ca41">✓ Authenticated successfully</div>
+        <div class="output-line" style="color:#28ca41">✓ Connected to Claude claude-sonnet-4-6</div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">claude doctor</span>
+        </div>
+        <div class="output-line"><span class="success">✓ Node.js v22.14.0</span></div>
+        <div class="output-line"><span class="success">✓ Authentication valid</span></div>
+        <div class="output-line"><span class="success">✓ Network connection ok</span></div>
+        <div class="output-line"><span class="success">✓ All checks passed</span></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-icon">💡</div>
+      <div class="callout-text"><code style="font-family:var(--font-mono);font-size:12px;">claude doctor</code> runs a health check on your setup. Run it anytime something feels broken -- it auto-detects most issues and tells you how to fix them.</div>
+    </div>
+  </div>
+
+  <!-- Step 6: Git + GitHub -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">06</div>
+      <div class="step-title">Install Git and connect GitHub</div>
+    </div>
+    <div class="step-body">
+      <p>Git tracks your code changes. GitHub is where those changes live online. Check if Git is already installed first, then configure it with your details.</p>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">git <span class="flag">--version</span></span>
+        </div>
+        <div class="output-line"><span class="version">git version 2.47.1</span> <span class="comment"># if you see this, skip brew install below</span></div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">brew install git <span class="comment"># only if not installed</span></span>
+        </div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">git config <span class="flag">--global</span> user.name <span class="string">"Your Name"</span></span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">git config <span class="flag">--global</span> user.email <span class="string">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c1b8aeb481a0a8b3aeb1b2efa2aeac">[email&#160;protected]</a>"</span></span>
+        </div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">ssh-keygen <span class="flag">-t ed25519 -C</span> <span class="string">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="077e687247666e756877742964686a">[email&#160;protected]</a>"</span></span>
+        </div>
+        <div class="output-line">Generating public/private ed25519 key pair.</div>
+        <div class="output-line">Enter file to save the key: <span class="comment"># press Enter to accept default</span></div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">cat ~/.ssh/id_ed25519.pub</span>
+        </div>
+        <div class="output-line" style="color:#7dd3fc">ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA... <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3e47514b7e5f574c514e4d105d5153">[email&#160;protected]</a></div>
+        <div class="output-line"><span class="comment"># copy this entire line, then add it to github.com/settings/keys</span></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-icon">🔑</div>
+      <div class="callout-text"><strong>Adding your SSH key to GitHub:</strong> Go to github.com &rarr; Settings &rarr; SSH and GPG Keys &rarr; New SSH Key. Paste the output from the last command above. Full walkthrough at <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh" style="color:var(--green-500)">docs.github.com/en/authentication/connecting-to-github-with-ssh</a></div>
+    </div>
+  </div>
+
+  <!-- Step 7: Vercel -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">07</div>
+      <div class="step-title">Install Vercel CLI and connect your account</div>
+    </div>
+    <div class="step-body">
+      <p>Vercel is how you deploy projects from the terminal. Install the CLI, log in once, and after that <code style="font-family:var(--font-mono);font-size:12px;">vercel</code> from any project folder kicks off a deploy.</p>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">npm install <span class="flag">-g</span> vercel</span>
+        </div>
+        <div class="output-line">added 1 package in 3s</div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">vercel login</span>
+        </div>
+        <div class="output-line">? Log in to Vercel <span style="color:#7dd3fc">Continue with GitHub</span></div>
+        <div class="output-line">Opening browser... <span class="comment"># authorize in the browser, then return here</span></div>
+        <div class="output-line" style="color:#28ca41">✓ Logged in as <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="84fdebf1c4e5edf6ebf4f7aae7ebe9">[email&#160;protected]</a></div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">vercel <span class="flag">--version</span></span>
+        </div>
+        <div class="output-line"><span class="version">Vercel CLI 41.x.x</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 8: First use -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-number">08</div>
+      <div class="step-title">Start using Claude Code</div>
+    </div>
+    <div class="step-body">
+      <p>Navigate to any project folder and run <code style="font-family:var(--font-mono);font-size:12px;">claude</code>. It reads your files and waits for instructions. Every proposed change shows as a diff -- you approve or reject before anything happens.</p>
+    </div>
+
+    <div class="terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh — your-project</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">cd <span class="path">~/projects/your-project</span></span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">claude</span>
+        </div>
+        <div class="terminal-gap"></div>
+        <div class="output-line" style="color:#e2e8f0">✻ Welcome to Claude Code!</div>
+        <div class="output-line" style="color:#6b7280">  Type your request below. Ctrl+C to exit.</div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt" style="color:#7dd3fc">></span>
+          <span class="cmd" style="color:#e2e8f0">Explain what this project does</span>
+        </div>
+        <div class="terminal-gap"></div>
+        <div class="output-line" style="color:#e2e8f0">Reading codebase...</div>
+        <div class="output-line" style="color:#d1d5db">This is a Next.js application that... <span class="comment">(Claude responds here)</span></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-icon">🚀</div>
+      <div class="callout-text"><strong>Good first prompts:</strong> "Explain what this project does" / "Write tests for app.js" / "Fix the error in this file" / "Help me set up a new Next.js project"</div>
+    </div>
+  </div>
+
+  <!-- Reference table -->
+  <div class="section-title">Terminal quick reference</div>
+
+  <table class="ref-table">
+    <thead>
+      <tr>
+        <th>Command</th>
+        <th>What it does</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>cd folder-name</td>
+        <td>Navigate into a folder</td>
+      </tr>
+      <tr>
+        <td>cd ..</td>
+        <td>Go up one level</td>
+      </tr>
+      <tr>
+        <td>pwd</td>
+        <td>Show where you are right now</td>
+      </tr>
+      <tr>
+        <td>ls</td>
+        <td>List files in current folder</td>
+      </tr>
+      <tr>
+        <td>claude doctor</td>
+        <td>Run a health check on your Claude Code setup</td>
+      </tr>
+      <tr>
+        <td>claude --version</td>
+        <td>Check which version is installed</td>
+      </tr>
+      <tr>
+        <td>vercel</td>
+        <td>Deploy current project to Vercel</td>
+      </tr>
+      <tr>
+        <td>⌘ + K</td>
+        <td>Clear terminal window</td>
+      </tr>
+      <tr>
+        <td>Ctrl + C</td>
+        <td>Stop whatever is running / exit Claude</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Troubleshooting -->
+  <div class="section-title" style="margin-top:52px">Troubleshooting</div>
+
+  <p style="color:var(--text-secondary);font-size:14px;margin-bottom:32px;line-height:1.6;">These are the most common roadblocks people hit. Work through them in order -- most issues are resolved by step 2 or 3.</p>
+
+  <!-- Issue 1 -->
+  <div class="trouble-block">
+    <div class="trouble-header">
+      <div class="trouble-tag">01</div>
+      <div class="trouble-title">"command not found: claude" after installation</div>
+    </div>
+    <div class="trouble-body">
+      <p>This is the most common issue. The installer added Claude to your PATH, but your current terminal session hasn't picked it up yet.</p>
+      <p style="margin-top:8px"><strong>Fix 1 -- Reload your shell config (try this first):</strong></p>
+    </div>
+    <div class="terminal" style="margin-left:0; margin-top:12px;">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">source ~/.zshrc <span class="comment"># reload shell config</span></span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">claude <span class="flag">--version</span></span>
+        </div>
+        <div class="output-line"><span class="version">2.1.71</span> <span class="comment"># if this works, you're done</span></div>
+      </div>
+    </div>
+    <div class="trouble-body" style="margin-top:16px">
+      <p><strong>Fix 2 -- If that doesn't work, manually add Claude to your PATH:</strong></p>
+    </div>
+    <div class="terminal" style="margin-left:0; margin-top:12px;">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">echo $PATH | tr <span class="string">':'</span> <span class="string">'\n'</span> | grep <span class="flag">-E</span> <span class="string">"(local|claude)"</span></span>
+        </div>
+        <div class="output-line"><span class="comment"># you should see /usr/local/bin or ~/.local/bin listed</span></div>
+        <div class="output-line"><span class="comment"># if not, run this:</span></div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">echo <span class="string">'export PATH="$HOME/.local/bin:$PATH"'</span> >> ~/.zshrc</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">source ~/.zshrc</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">claude <span class="flag">--version</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="callout" style="margin-left:0; margin-top:12px;">
+      <div class="callout-icon">💡</div>
+      <div class="callout-text">If you're on bash instead of zsh, replace <code style="font-family:var(--font-mono);font-size:12px;">~/.zshrc</code> with <code style="font-family:var(--font-mono);font-size:12px;">~/.bashrc</code> in all commands above. Check your shell with <code style="font-family:var(--font-mono);font-size:12px;">echo $SHELL</code>.</div>
+    </div>
+  </div>
+
+  <!-- Issue 2 -->
+  <div class="trouble-block">
+    <div class="trouble-header">
+      <div class="trouble-tag">02</div>
+      <div class="trouble-title">EACCES permission denied error</div>
+    </div>
+    <div class="trouble-body">
+      <p>This happens when npm tries to write to a system directory it doesn't have access to. Usually caused by using <code style="font-family:var(--font-mono);font-size:12px;background:#f3f4f6;padding:2px 5px;">sudo npm install</code> at some point, which locks down folder permissions. The fix is to redirect npm's global directory to your user folder.</p>
+    </div>
+    <div class="terminal" style="margin-left:0; margin-top:12px;">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">mkdir ~/.npm-global</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">npm config set prefix <span class="string">'~/.npm-global'</span></span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">echo <span class="string">'export PATH=~/.npm-global/bin:$PATH'</span> >> ~/.zshrc</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">source ~/.zshrc</span>
+        </div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">curl <span class="flag">-fsSL</span> https://claude.ai/install.sh | bash <span class="comment"># reinstall</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Issue 3 -->
+  <div class="trouble-block">
+    <div class="trouble-header">
+      <div class="trouble-tag">03</div>
+      <div class="trouble-title">Node.js version too old (or not found)</div>
+    </div>
+    <div class="trouble-body">
+      <p>Claude Code needs Node 18 or higher. If you installed Node a long time ago, you may be on an older version. Check first, then update if needed.</p>
+    </div>
+    <div class="terminal" style="margin-left:0; margin-top:12px;">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">node <span class="flag">--version</span></span>
+        </div>
+        <div class="output-line"><span style="color:#f87171">v16.14.0</span> <span class="comment"># too old -- need v18+</span></div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">brew upgrade node <span class="comment"># if installed via Homebrew</span></span>
+        </div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">node <span class="flag">--version</span></span>
+        </div>
+        <div class="output-line"><span class="version">v22.14.0</span> <span class="success"> ✓</span></div>
+      </div>
+    </div>
+    <div class="callout" style="margin-left:0; margin-top:12px;">
+      <div class="callout-icon">💡</div>
+      <div class="callout-text">If you manage multiple Node versions (common for devs), use <code style="font-family:var(--font-mono);font-size:12px;">nvm use 20</code> or <code style="font-family:var(--font-mono);font-size:12px;">nvm install --lts</code> to switch to a supported version.</div>
+    </div>
+  </div>
+
+  <!-- Issue 4 -->
+  <div class="trouble-block">
+    <div class="trouble-header">
+      <div class="trouble-tag">04</div>
+      <div class="trouble-title">Authentication fails or browser doesn't open</div>
+    </div>
+    <div class="trouble-body">
+      <p>A few things can cause this. Work through them in order.</p>
+      <p style="margin-top:8px"><strong>Check 1:</strong> Make sure you're on a paid Claude plan. Free accounts can't use Claude Code.</p>
+      <p style="margin-top:8px"><strong>Check 2:</strong> If the browser didn't open automatically, copy the URL manually.</p>
+    </div>
+    <div class="terminal" style="margin-left:0; margin-top:12px;">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">claude</span>
+        </div>
+        <div class="output-line">Opening browser for authentication...</div>
+        <div class="output-line"><span style="color:#7dd3fc">https://claude.ai/auth/cli?token=xxxx</span></div>
+        <div class="output-line"><span class="comment"># if browser doesn't open: copy the URL and paste it manually</span></div>
+        <div class="output-line"><span class="comment"># or: hold ⌘ and click the link in Terminal</span></div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">claude doctor <span class="comment"># run this after auth to verify</span></span>
+        </div>
+        <div class="output-line"><span class="success">✓ Authentication valid</span></div>
+      </div>
+    </div>
+    <div class="callout warn" style="margin-left:0; margin-top:12px;">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-text"><strong>Still failing?</strong> Check the <a href="https://status.anthropic.com" style="color:var(--green-500)">Anthropic status page</a> -- an API incident accounts for roughly 5% of authentication failures that look like local problems.</div>
+    </div>
+  </div>
+
+  <!-- Issue 5 -->
+  <div class="trouble-block">
+    <div class="trouble-header">
+      <div class="trouble-tag">05</div>
+      <div class="trouble-title">Xcode / command line tools error on Mac</div>
+    </div>
+    <div class="trouble-body">
+      <p>macOS requires Xcode Command Line Tools for many installs, including Homebrew and some npm packages. If you see an error mentioning <code style="font-family:var(--font-mono);font-size:12px;background:#f3f4f6;padding:2px 5px;">xcode-select</code>, run this and wait for it to finish before retrying.</p>
+    </div>
+    <div class="terminal" style="margin-left:0; margin-top:12px;">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">xcode-select <span class="flag">--install</span></span>
+        </div>
+        <div class="output-line">xcode-select: note: install requested for command line developer tools</div>
+        <div class="output-line"><span class="comment"># a dialog will pop up -- click Install and wait ~5 minutes</span></div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">xcode-select <span class="flag">-p</span> <span class="comment"># verify it worked</span></span>
+        </div>
+        <div class="output-line"><span class="path">/Library/Developer/CommandLineTools</span> <span class="success"> ✓</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Issue 6 -->
+  <div class="trouble-block">
+    <div class="trouble-header">
+      <div class="trouble-tag">06</div>
+      <div class="trouble-title">Claude installs but nothing happens when you run it</div>
+    </div>
+    <div class="trouble-body">
+      <p>If <code style="font-family:var(--font-mono);font-size:12px;background:#f3f4f6;padding:2px 5px;">claude</code> runs but immediately exits or hangs, the install may be corrupted. A clean reinstall fixes this in most cases.</p>
+    </div>
+    <div class="terminal" style="margin-left:0; margin-top:12px;">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">which claude <span class="comment"># find the install location</span></span>
+        </div>
+        <div class="output-line"><span class="path">/usr/local/bin/claude</span></div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">npm uninstall <span class="flag">-g</span> @anthropic-ai/claude-code</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">curl <span class="flag">-fsSL</span> https://claude.ai/install.sh | bash</span>
+        </div>
+        <div class="terminal-gap"></div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">claude doctor</span>
+        </div>
+        <div class="output-line"><span class="success">✓ All checks passed</span></div>
+      </div>
+    </div>
+    <div class="callout" style="margin-left:0; margin-top:12px;">
+      <div class="callout-icon">💡</div>
+      <div class="callout-text">Your config in <code style="font-family:var(--font-mono);font-size:12px;">~/.claude/</code> is preserved during reinstall, so you won't lose any settings or authentication.</div>
+    </div>
+  </div>
+
+  <!-- Issue 7 -->
+  <div class="trouble-block" style="margin-bottom:0">
+    <div class="trouble-header">
+      <div class="trouble-tag">07</div>
+      <div class="trouble-title">Still stuck? Run the full diagnostic</div>
+    </div>
+    <div class="trouble-body">
+      <p>If none of the above resolves it, run the diagnostic script below and share the output in <strong>#tools-and-infra</strong>. It checks every known config point and tells you exactly what's wrong.</p>
+    </div>
+    <div class="terminal" style="margin-left:0; margin-top:12px;">
+      <div class="terminal-bar">
+        <div class="terminal-dot dot-red"></div>
+        <div class="terminal-dot dot-yellow"></div>
+        <div class="terminal-dot dot-green"></div>
+        <div class="terminal-title">Terminal — zsh</div>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">echo <span class="string">"=== Shell ==="</span> && echo $SHELL</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">echo <span class="string">"=== Node ==="</span> && node <span class="flag">--version</span></span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">echo <span class="string">"=== npm ==="</span> && npm <span class="flag">--version</span></span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">echo <span class="string">"=== Claude path ==="</span> && which claude</span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">echo <span class="string">"=== Claude version ==="</span> && claude <span class="flag">--version</span></span>
+        </div>
+        <div class="terminal-line">
+          <span class="prompt">$</span>
+          <span class="cmd">claude doctor</span>
+        </div>
+        <div class="terminal-gap"></div>
+        <div class="output-line"><span class="comment"># copy everything above and paste it in #tools-and-infra</span></div>
+      </div>
+    </div>
+    <div class="callout" style="margin-left:0; margin-top:12px;">
+      <div class="callout-icon">🔗</div>
+      <div class="callout-text">Official docs: <a href="https://docs.anthr
