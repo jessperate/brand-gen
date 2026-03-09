@@ -1022,15 +1022,10 @@ businessDays should be: 3 for Tier 1, 4 for Tier 2, 7 for Tier 3.
 The "needs" array should be 3-5 specific things they need to submit with this request tailored to their specific ask.`;
 
   try {
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+    const response = await fetch("/api/classify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: [{ role: "user", content: input }]
-      })
+      body: JSON.stringify({ input, systemPrompt })
     });
 
     const data = await response.json();
