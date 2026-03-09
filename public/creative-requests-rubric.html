@@ -412,6 +412,52 @@
     .tier-timeline { text-align: left; }
   }
 
+
+  /* Slack CTA */
+  .slack-cta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--stroke-green);
+    flex-wrap: wrap;
+  }
+
+  .slack-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: #4A154B;
+    color: #fff;
+    border: none;
+    font-family: 'Saans', 'Helvetica Neue', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .slack-cta-btn:hover { background: #611f64; }
+  .slack-cta-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .slack-cta-hint {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-family: 'Saans Mono', monospace;
+    letter-spacing: 0.03em;
+  }
+
+  .slack-status {
+    font-size: 13px;
+    font-family: 'Saans Mono', monospace;
+    letter-spacing: 0.03em;
+  }
+  .slack-status.sending { color: var(--text-secondary); }
+  .slack-status.sent { color: var(--green-500); font-weight: 500; }
+  .slack-status.error { color: #e53e3e; }
+
   /* ---- Classifier ---- */
   .classifier-wrap {
     margin-bottom: 48px;
@@ -912,6 +958,31 @@
 
 
 <script>
+// Store last result globally so the CTA can access it
+let lastClassification = null;
+
+function addBusinessDays(date, days) {
+  let d = new Date(date);
+  let added = 0;
+  while (added < days) {
+    d.setDate(d.getDate() + 1);
+    const dow = d.getDay();
+    if (dow !== 0 && dow !== 6) added++;
+  }
+  return d;
+}
+
+function formatDate(date) {
+  return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function formatSlackDate(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
 async function classifyRequest() {
   const input = document.getElementById('classifierInput').value.trim();
   if (!input) return;
@@ -941,12 +1012,14 @@ Return JSON in this exact format (no markdown, no backticks, just raw JSON):
   "tier": 1,
   "type": "Short name for the request type",
   "timeline": "3 business days",
+  "businessDays": 3,
   "summary": "1-2 sentences explaining why this is the tier it is, specific to their request.",
   "needs": ["item 1", "item 2", "item 3", "item 4"],
   "flag": "Optional warning if something in the request might cause delays or scope issues. Null if none."
 }
 
-The "needs" array should be 3-5 specific things they need to submit with this request (copy, headshots, specs, brief, etc.) tailored to their specific ask.`;
+businessDays should be: 3 for Tier 1, 4 for Tier 2, 7 for Tier 3.
+The "needs" array should be 3-5 specific things they need to submit with this request tailored to their specific ask.`;
 
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -963,6 +1036,10 @@ The "needs" array should be 3-5 specific things they need to submit with this re
     const data = await response.json();
     const raw = data.content[0].text.replace(/```json|```/g, '').trim();
     const result = JSON.parse(raw);
+    lastClassification = { ...result, description: input };
+
+    const dueDate = addBusinessDays(new Date(), result.businessDays);
+    const dueDateDisplay = formatDate(dueDate);
 
     const tierClass = result.tier === 1 ? 't1' : result.tier === 2 ? 't2' : 't3';
     const tierLabel = result.tier === 1 ? 'Tier 1' : result.tier === 2 ? 'Tier 2' : 'Tier 3';
@@ -970,7 +1047,7 @@ The "needs" array should be 3-5 specific things they need to submit with this re
     let html = `
       <div class="result-tier-header">
         <span class="result-tier-pill ${tierClass}">${tierLabel} — ${result.type}</span>
-        <span class="result-timeline-tag">${result.timeline}</span>
+        <span class="result-timeline-tag">${result.timeline} &rarr; due ${dueDateDisplay}</span>
       </div>
       <p class="result-body-text">${result.summary}</p>
       <div class="result-needs-header">What to include in your submission</div>
@@ -983,6 +1060,17 @@ The "needs" array should be 3-5 specific things they need to submit with this re
       html += `<div class="result-flag"><strong>Heads up:</strong> ${result.flag}</div>`;
     }
 
+    html += `
+      <div class="slack-cta-row">
+        <button class="slack-cta-btn" onclick="sendToSlack()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>
+          Send to #creative-requests
+        </button>
+        <span class="slack-cta-hint">Copies message + opens #creative-requests — just paste &amp; send</span>
+        <span id="slackStatus" class="slack-status"></span>
+      </div>
+    `;
+
     resultDiv.innerHTML = html;
     resultDiv.style.display = 'block';
 
@@ -994,6 +1082,49 @@ The "needs" array should be 3-5 specific things they need to submit with this re
   btn.disabled = false;
   btnText.style.display = 'inline';
   btnSpinner.style.display = 'none';
+}
+
+function buildSlackMessage(r) {
+  const dueDate = addBusinessDays(new Date(), r.businessDays);
+  const tierLabel = r.tier === 1 ? 'Tier 1' : r.tier === 2 ? 'Tier 2' : 'Tier 3';
+  const tierEmoji = r.tier === 1 ? ':yellow_heart:' : r.tier === 2 ? ':green_heart:' : ':black_heart:';
+  const needsList = r.needs.map(n => `  • ${n}`).join('\n');
+  const flagLine = r.flag ? `\n:warning: *Heads up:* ${r.flag}` : '';
+  return `${tierEmoji} *New Creative Request — ${tierLabel}* (${r.type})
+
+*Request:*
+${r.description}
+
+*Recommended due date:* ${formatDate(dueDate)}
+*Lead time:* ${r.timeline}
+
+*What to include in your submission:*
+${needsList}${flagLine}
+
+_Classified via the Creative Request Rubric_`;
+}
+
+async function sendToSlack() {
+  if (!lastClassification) return;
+
+  const slackBtn = document.querySelector('.slack-cta-btn');
+  const statusEl = document.getElementById('slackStatus');
+
+  const message = buildSlackMessage(lastClassification);
+
+  try {
+    await navigator.clipboard.writeText(message);
+  } catch(e) {
+    // clipboard failed silently — user can still open Slack
+  }
+
+  // Open #creative-requests in Slack
+  window.open('https://teamairops.slack.com/archives/C0A2T4MV3E2', '_blank');
+
+  slackBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg> Opened — paste to send`;
+  slackBtn.style.background = '#008c44';
+  statusEl.textContent = '✓ Message copied to clipboard';
+  statusEl.className = 'slack-status sent';
 }
 
 document.getElementById('classifierInput').addEventListener('keydown', function(e) {
