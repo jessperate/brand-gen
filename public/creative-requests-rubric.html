@@ -339,6 +339,55 @@
   .rg-tier-pill.t3 { background: var(--green-200); }
   .rg-tier-pill.tspecial { background: var(--near-black); color: var(--white); }
 
+  /* Web tier cards */
+  .web-tiers { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--stroke-green); }
+
+  .web-tier-card {
+    background: var(--white);
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 200px 1fr 140px;
+    gap: 24px;
+    align-items: start;
+    border-bottom: 1px solid var(--stroke-green);
+  }
+
+  .web-tier-card:last-child { border-bottom: none; }
+  .web-tier-card:hover { background: var(--green-50); }
+
+  .web-tier-badge {
+    display: inline-block;
+    font-family: 'Saans Mono', 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    margin-bottom: 10px;
+  }
+
+  .web-tier-badge.wt1 { background: var(--near-black); color: var(--white); }
+  .web-tier-badge.wt2 { background: var(--green-200); color: var(--near-black); border: 1px solid var(--stroke-green); }
+  .web-tier-badge.wt3 { background: var(--accent-label); color: var(--near-black); border: 1px solid var(--stroke-green); }
+
+  .web-tier-qualifies {
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-top: 8px;
+    font-family: 'Saans Mono', 'DM Mono', monospace;
+    letter-spacing: 0.02em;
+  }
+
+  .web-tier-qualifies strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  @media (max-width: 700px) {
+    .web-tier-card { grid-template-columns: 1fr; }
+  }
+
   /* Dos & don'ts */
   .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
@@ -637,8 +686,8 @@
 <!-- TIER CLASSIFIER -->
 <div class="classifier-wrap">
   <div class="section-label">Quick check</div>
-  <h2>What tier is my request?</h2>
-  <p class="classifier-sub">Describe what you need in plain language and we’ll tell you what tier it falls under, the lead time, and what to include in your submission.</p>
+  <h2>How big is my request?</h2>
+  <p class="classifier-sub">Describe what you need in plain language and we’ll tell you the size of the ask, the lead time, and what to include in your submission.</p>
 
   <div class="classifier-box">
     <textarea id="classifierInput" placeholder="e.g. I need social graphics for our webinar next Thursday with two speakers, plus a landing page for the event..." rows="3"></textarea>
@@ -658,13 +707,13 @@
 <!-- TIER 1 -->
 <section>
   <div class="section-label">Part 01</div>
-  <h2>Request Tiers & Lead Times</h2>
+  <h2>Request Sizes & Lead Times</h2>
 
   <div class="tiers">
 
     <div class="tier-card">
       <div class="tier-label-col">
-        <div class="tier-badge">Tier 1</div>
+        <div class="tier-badge">Small Ask</div>
         <div class="tier-type">One-off assets</div>
         <div class="tier-examples">Webinar promos, social posts, quote cards, templated graphics, email headers, blog headers, slide graphics</div>
       </div>
@@ -673,7 +722,7 @@
         <p>Submit via the #creative-requests form with all copy, headshots, and specs finalized. Incomplete briefs restart the clock.</p>
       </div>
       <div class="tier-timeline">
-        <div class="timeline-num">3</div>
+        <div class="timeline-num">~3</div>
         <div class="timeline-unit">business days</div>
         <div class="timeline-breakdown">Submit with all assets<br>+ copy ready to go</div>
       </div>
@@ -681,7 +730,7 @@
 
     <div class="tier-card">
       <div class="tier-label-col">
-        <div class="tier-badge">Tier 2</div>
+        <div class="tier-badge">Medium Ask</div>
         <div class="tier-type">Templated landing pages</div>
         <div class="tier-examples">Webinar LPs, gated asset pages, event pages, PPC pages using existing component library</div>
       </div>
@@ -690,7 +739,7 @@
         <p>If copy is still in draft when you submit, design won't start until it's locked.</p>
       </div>
       <div class="tier-timeline">
-        <div class="timeline-num">4</div>
+        <div class="timeline-num">~4</div>
         <div class="timeline-unit">business days</div>
         <div class="timeline-breakdown">2 days design<br>2 days dev</div>
       </div>
@@ -698,7 +747,7 @@
 
     <div class="tier-card">
       <div class="tier-label-col">
-        <div class="tier-badge">Tier 3</div>
+        <div class="tier-badge">Big Ask</div>
         <div class="tier-type">Custom landing pages</div>
         <div class="tier-examples">Net-new page concepts, non-standard layouts, custom interactive sections, campaign-specific pages</div>
       </div>
@@ -707,7 +756,7 @@
         <p>Bring these to Jess before submitting the formal request so scope can be validated against team capacity.</p>
       </div>
       <div class="tier-timeline">
-        <div class="timeline-num">5–7</div>
+        <div class="timeline-num">6+</div>
         <div class="timeline-unit">business days</div>
         <div class="timeline-breakdown">Brief + copy review<br>Design + revisions<br>Dev + QA</div>
       </div>
@@ -716,9 +765,80 @@
   </div>
 </section>
 
-<!-- WHAT TO INCLUDE -->
+<!-- WEB PROJECT TIERS -->
 <section>
   <div class="section-label">Part 02</div>
+  <h2>Web Project Process</h2>
+  <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;">Web requests have their own tiering system based on design and dev complexity. Use this to understand the level of process required before submitting.</p>
+
+  <div class="web-tiers">
+
+    <div class="web-tier-card">
+      <div class="tier-label-col">
+        <div class="web-tier-badge wt1">Tier 1</div>
+        <div class="tier-type">Complex build</div>
+        <div class="tier-examples">Use case hub, archetype quiz, blog redesign, resource center, interactive tools, campaign microsites, new product or solution pages</div>
+        <div class="web-tier-qualifies">
+          <strong>Qualifies if:</strong> net-new URL requiring significant design + dev work, new CMS collection or architecture, custom interactions or integrations, or a major structural redesign of a high-traffic page.
+        </div>
+      </div>
+      <div class="tier-body">
+        <p>High-strategy, high-design-complexity builds. These require a full brief, cross-functional review, and sign-off from design, dev, and marketing before any work begins.</p>
+        <p>Start with a Tier 1 project brief in Notion and align with Jess before anything moves to Asana. No exceptions -- skipping the brief adds weeks, not days.</p>
+      </div>
+      <div class="tier-timeline">
+        <div class="timeline-num">2–3</div>
+        <div class="timeline-unit">weeks</div>
+        <div class="timeline-breakdown">Concept → design<br>→ dev → QA</div>
+      </div>
+    </div>
+
+    <div class="web-tier-card">
+      <div class="tier-label-col">
+        <div class="web-tier-badge wt2">Tier 2</div>
+        <div class="tier-type">Moderate lift</div>
+        <div class="tier-examples">New webinar registration page, new customer story, section addition to existing page, campaign page refresh</div>
+        <div class="web-tier-qualifies">
+          <strong>Qualifies if:</strong> new page from an existing template, new CMS entry (customer story, blog post), adding a section to a live page, or refreshing creative/copy on an existing landing page.
+        </div>
+      </div>
+      <div class="tier-body">
+        <p>Templated or repeatable work that fits existing patterns. Some design involvement but no new CMS architecture. Can move with a Slack request + Asana ticket, but still requires copy review and QA before launch.</p>
+        <p>Copy must be finalized before design starts. Design and dev run sequentially -- dev doesn't start until design is approved.</p>
+      </div>
+      <div class="tier-timeline">
+        <div class="timeline-num">1–2</div>
+        <div class="timeline-unit">weeks</div>
+        <div class="timeline-breakdown">Brief → design<br>→ dev → QA</div>
+      </div>
+    </div>
+
+    <div class="web-tier-card">
+      <div class="tier-label-col">
+        <div class="web-tier-badge wt3">Tier 3</div>
+        <div class="tier-type">Simple update</div>
+        <div class="tier-examples">Copy edit, image swap, stat or quote update, meta description update, broken link fix, press mention</div>
+        <div class="web-tier-qualifies">
+          <strong>Qualifies if:</strong> copy or CTA update, asset swap, content refresh (stat, logo, badge), SEO metadata update, or a bug/link fix. No design or dev needed.
+        </div>
+      </div>
+      <div class="tier-body">
+        <p>Content and asset updates that don't touch layout, structure, or functionality. These can move quickly but still require a brief review before publishing -- run through the Tier 3 checklist before anything goes live.</p>
+        <p>Even simple updates need a staging review. "I'll just fix it in prod" is never the move.</p>
+      </div>
+      <div class="tier-timeline">
+        <div class="timeline-num">1–3</div>
+        <div class="timeline-unit">days</div>
+        <div class="timeline-breakdown">Depending on priority<br>+ team workload</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHAT TO INCLUDE -->
+<section>
+  <div class="section-label">Part 03</div>
   <h2>What every request needs</h2>
 
   <div class="checklist">
@@ -727,7 +847,7 @@
         <svg viewBox="0 0 10 10" fill="none"><path d="M1.5 5.5L4 8L8.5 2.5" stroke="#008c44" stroke-width="1.5" stroke-linecap="square"/></svg>
       </div>
       <div>
-        <div class="check-label">Request type + tier</div>
+        <div class="check-label">Request type + size</div>
         <div class="check-desc">Know what you're asking for before you submit. "Can you make something for the webinar?" is not a brief.</div>
       </div>
     </div>
@@ -781,7 +901,7 @@
 
 <!-- REQUEST TYPES FROM CHANNEL -->
 <section>
-  <div class="section-label">Part 03</div>
+  <div class="section-label">Part 04</div>
   <h2>Most common request types</h2>
   <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;">Based on channel history. Use this as a guide when categorizing your own request.</p>
 
@@ -789,89 +909,89 @@
     <div class="rg-header">
       <span>Request type</span>
       <span>Typically from</span>
-      <span>Tier</span>
+      <span>Size</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Webinar promo graphics (square, landscape, vertical)</div>
       <div class="rg-who">Jim, Josh, Eoin</div>
-      <span class="rg-tier-pill">Tier 1 — 3 days</span>
+      <span class="rg-tier-pill">Small Ask — ~3 days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Social post / quote card assets</div>
       <div class="rg-who">Ally, Eoin, Jordan</div>
-      <span class="rg-tier-pill">Tier 1 — 3 days</span>
+      <span class="rg-tier-pill">Small Ask — ~3 days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Paid social ad creatives (LinkedIn, Meta, X)</div>
       <div class="rg-who">Jim, Julia</div>
-      <span class="rg-tier-pill">Tier 1 — 3 days</span>
+      <span class="rg-tier-pill">Small Ask — ~3 days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Customer story / case study assets (hero, quote, diagram)</div>
       <div class="rg-who">Jordan</div>
-      <span class="rg-tier-pill">Tier 1 — 3 days</span>
+      <span class="rg-tier-pill">Small Ask — ~3 days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Blog / email header graphics</div>
       <div class="rg-who">Josh, Julia</div>
-      <span class="rg-tier-pill">Tier 1 — 3 days</span>
+      <span class="rg-tier-pill">Small Ask — ~3 days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Data visualization / chart assets</div>
       <div class="rg-who">Oshen, Josh</div>
-      <span class="rg-tier-pill">Tier 1 — 3 days</span>
+      <span class="rg-tier-pill">Small Ask — ~3 days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Slide / presentation graphic (deck inserts)</div>
       <div class="rg-who">Eoin, Josh, Cyris</div>
-      <span class="rg-tier-pill">Tier 1 — 3 days</span>
+      <span class="rg-tier-pill">Small Ask — ~3 days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Event collateral (cards, signage, handouts)</div>
       <div class="rg-who">Ally, Kendalle</div>
-      <span class="rg-tier-pill">Tier 1 — 3 days</span>
+      <span class="rg-tier-pill">Small Ask — ~3 days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Email template / HubSpot module</div>
       <div class="rg-who">Julia, Katelyn</div>
-      <span class="rg-tier-pill">Tier 1–2</span>
+      <span class="rg-tier-pill">Small–Medium Ask</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Webinar landing page (templated)</div>
       <div class="rg-who">Jim, Josh</div>
-      <span class="rg-tier-pill t3">Tier 2 — 4 days</span>
+      <span class="rg-tier-pill t3">Medium Ask — ~4 days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Gated asset / newsletter LP (templated)</div>
       <div class="rg-who">Josh, Julia</div>
-      <span class="rg-tier-pill t3">Tier 2 — 4 days</span>
+      <span class="rg-tier-pill t3">Medium Ask — ~4 days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">PPC / paid landing page (existing template)</div>
       <div class="rg-who">Julia, Jim</div>
-      <span class="rg-tier-pill t3">Tier 2 — 4 days</span>
+      <span class="rg-tier-pill t3">Medium Ask — ~4 days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Compare / competitor LP (net-new)</div>
       <div class="rg-who">Jim</div>
-      <span class="rg-tier-pill tspecial">Tier 3 — 5–7 days</span>
+      <span class="rg-tier-pill tspecial">Big Ask — 6+ days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">New use-case or product page</div>
       <div class="rg-who">Jordan, Josh</div>
-      <span class="rg-tier-pill tspecial">Tier 3 — 5–7 days</span>
+      <span class="rg-tier-pill tspecial">Big Ask — 6+ days</span>
     </div>
     <div class="rg-row">
       <div class="rg-type">Campaign microsite / custom page concept</div>
       <div class="rg-who">Ally, Jess</div>
-      <span class="rg-tier-pill tspecial">Tier 3 — 5–7 days</span>
+      <span class="rg-tier-pill tspecial">Big Ask — 6+ days</span>
     </div>
   </div>
 </section>
 
 <!-- DOS AND DON'TS -->
 <section>
-  <div class="section-label">Part 04</div>
+  <div class="section-label">Part 05</div>
   <h2>How this works in practice</h2>
 
   <div class="two-col">
@@ -898,7 +1018,7 @@
 
 <!-- RECURRING / STANDING REQUESTS -->
 <section>
-  <div class="section-label">Part 05</div>
+  <div class="section-label">Part 06</div>
   <h2>Recurring & standing needs</h2>
   <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;">Some request types come up every week or every launch cycle. Templates exist for these -- use them.</p>
 
@@ -999,26 +1119,26 @@ async function classifyRequest() {
   resultDiv.style.display = 'none';
   errorDiv.style.display = 'none';
 
-  const systemPrompt = `You are a creative request classifier for AirOps Brand & Creative team. 
+  const systemPrompt = `You are a creative request classifier for AirOps Brand & Creative team.
 Given a description of a creative request, classify it into one of three tiers and return ONLY valid JSON.
 
-Tier definitions:
-- Tier 1: One-off assets (3 business days). Single deliverables using existing templates: social graphics, webinar promo graphics, quote cards, data viz, blog/email headers, slide inserts, event collateral, paid ad creatives, email template updates.
-- Tier 2: Templated landing pages (4 business days: 2 design + 2 dev). Pages built with existing Webflow component library: webinar LPs, gated asset pages, newsletter pages, PPC/paid landing pages, event pages. Copy must be finalized first.
-- Tier 3: Custom landing pages (5-7 business days). Net-new design thinking required: custom layouts, new page concepts, use-case pages, campaign microsites, competitor/compare pages that don't follow existing templates.
+Request size definitions:
+- Small Ask (tier 1): One-off assets (~3 business days). Single deliverables using existing templates: social graphics, webinar promo graphics, quote cards, data viz, blog/email headers, slide inserts, event collateral, paid ad creatives, email template updates. Also maps to "Web Tier 3" (simple content/copy/asset updates on existing pages).
+- Medium Ask (tier 2): Templated landing pages (~4 business days: 2 design + 2 dev). Pages built with existing Webflow component library: webinar LPs, gated asset pages, newsletter pages, PPC/paid landing pages, event pages. Copy must be finalized first. Also maps to "Web Tier 2" (new page from existing template, new CMS entry, section additions, campaign page refreshes).
+- Big Ask (tier 3): Custom landing pages or complex web builds (6+ business days, often 2-3 weeks for complex builds). Net-new design thinking required: custom layouts, new page concepts, use-case pages, campaign microsites, competitor/compare pages, new CMS collections/hubs, major page redesigns. Also maps to "Web Tier 1" (full cross-functional brief and sign-off required).
 
 Return JSON in this exact format (no markdown, no backticks, just raw JSON):
 {
   "tier": 1,
   "type": "Short name for the request type",
-  "timeline": "3 business days",
+  "timeline": "~3 business days",
   "businessDays": 3,
-  "summary": "1-2 sentences explaining why this is the tier it is, specific to their request.",
+  "summary": "1-2 sentences explaining why this is the size it is, specific to their request.",
   "needs": ["item 1", "item 2", "item 3", "item 4"],
   "flag": "Optional warning if something in the request might cause delays or scope issues. Null if none."
 }
 
-businessDays should be: 3 for Tier 1, 4 for Tier 2, 7 for Tier 3.
+businessDays should be: 3 for Small Ask (tier 1), 4 for Medium Ask (tier 2), 7 for Big Ask (tier 3).
 The "needs" array should be 3-5 specific things they need to submit with this request tailored to their specific ask.`;
 
   try {
@@ -1043,7 +1163,7 @@ The "needs" array should be 3-5 specific things they need to submit with this re
     const dueDateDisplay = formatDate(dueDate);
 
     const tierClass = result.tier === 1 ? 't1' : result.tier === 2 ? 't2' : 't3';
-    const tierLabel = result.tier === 1 ? 'Tier 1' : result.tier === 2 ? 'Tier 2' : 'Tier 3';
+    const tierLabel = result.tier === 1 ? 'Small Ask' : result.tier === 2 ? 'Medium Ask' : 'Big Ask';
 
     let html = `
       <div class="result-tier-header">
@@ -1087,7 +1207,7 @@ The "needs" array should be 3-5 specific things they need to submit with this re
 
 function buildSlackMessage(r) {
   const dueDate = addBusinessDays(new Date(), r.businessDays);
-  const tierLabel = r.tier === 1 ? 'Tier 1' : r.tier === 2 ? 'Tier 2' : 'Tier 3';
+  const tierLabel = r.tier === 1 ? 'Small Ask' : r.tier === 2 ? 'Medium Ask' : 'Big Ask';
   const tierEmoji = r.tier === 1 ? ':yellow_heart:' : r.tier === 2 ? ':green_heart:' : ':black_heart:';
   const needsList = r.needs.map(n => `  • ${n}`).join('\n');
   const flagLine = r.flag ? `\n:warning: *Heads up:* ${r.flag}` : '';
